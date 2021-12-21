@@ -4,6 +4,7 @@ kotlin = "1.6.10"
 arrow = "1.0.1"
 jgit = "6.0.0.202111291000-r"
 semverCore = "0.1.0-beta.9"
+semverPlugin = "0.0.6"
 
 [libraries]
 kotest-junit5-jvm = { module = "io.kotest:kotest-runner-junit5-jvm", version.ref = "kotest" }
@@ -18,3 +19,4 @@ kotlin-testing = [ "kotest-junit5-jvm", "kotest-assertions-core-jvm" ]
 [plugins]
 gradlePluginPublish = { id = "com.gradle.plugin-publish", version = "0.18.0" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+semver = { id = "io.github.nefilim.gradle.semver-plugin", version.ref = "semverPlugin" }
