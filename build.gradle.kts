@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.gradlePluginPublish)
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.semver)
+    alias(libs.plugins.githubrelease)
 }
 
 /*
@@ -103,11 +104,3 @@ pluginBundle {
     vcsUrl = info.website
     tags = info.tags
 }
-
-//val publishPlugins = tasks.findByPath(":plugin:publishPlugins")
-
-//tasks.publishPlugins {
-////    from(docsFileJar)
-//    dependsOn("publishPluginJar")
-//    dependsOn("publishPluginJavaDocsJar")
-//}
