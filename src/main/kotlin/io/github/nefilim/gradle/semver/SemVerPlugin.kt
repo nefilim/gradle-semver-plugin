@@ -53,6 +53,25 @@ open class GenerateVersionFileTask: DefaultTask() {
     }
 }
 
+open class GenerateVersionFileTask: DefaultTask() {
+    @TaskAction
+    fun generateVersionFile() {
+        val extension = (project.extensions[SemVerExtension.ExtensionName] as SemVerExtension)
+        with (project) {
+            File("$buildDir/semver/version.txt").apply {
+                parentFile.mkdirs()
+                createNewFile()
+                writeText(
+                    """
+                       |${extension.version().value}
+                       |${extension.versionTagName()}
+                    """.trimMargin()
+                )
+            }
+        }
+    }
+}
+
 internal fun SemVerPluginContext.calculateVersionFlow(): Either<SemVerError, Version> {
     verbose("current branch: ${repository.fullBranch}")
 
