@@ -53,25 +53,6 @@ open class GenerateVersionFileTask: DefaultTask() {
     }
 }
 
-open class GenerateVersionFileTask: DefaultTask() {
-    @TaskAction
-    fun generateVersionFile() {
-        val extension = (project.extensions[SemVerExtension.ExtensionName] as SemVerExtension)
-        with (project) {
-            File("$buildDir/semver/version.txt").apply {
-                parentFile.mkdirs()
-                createNewFile()
-                writeText(
-                    """
-                       |${extension.version().value}
-                       |${extension.versionTagName()}
-                    """.trimMargin()
-                )
-            }
-        }
-    }
-}
-
 internal fun SemVerPluginContext.calculateVersionFlow(): Either<SemVerError, Version> {
     verbose("current branch: ${repository.fullBranch}")
 
@@ -81,11 +62,11 @@ internal fun SemVerPluginContext.calculateVersionFlow(): Either<SemVerError, Ver
         val developRefName = allBranches.firstOrNull { setOf(GitRef.DevelopBranch.RefName, GitRef.DevelopBranch.RemoteOriginRefName).contains(it.name) }?.name
         when {
             mainRefName == null -> {
-                missingRequiredBranch(GitRef.MainBranch.Name)
+                warnMissingRequiredBranch(GitRef.MainBranch.Name)
                 config.initialVersion
             }
             developRefName == null -> {
-                missingRequiredBranch(GitRef.DevelopBranch.Name)
+                warnMissingRequiredBranch(GitRef.DevelopBranch.Name)
                 config.initialVersion
             }
             else -> {
@@ -111,7 +92,7 @@ internal fun SemVerPluginContext.calculateVersionFlow(): Either<SemVerError, Ver
     }
 }
 
-private fun SemVerPluginContext.missingRequiredBranch(branchName: String) {
+private fun SemVerPluginContext.warnMissingRequiredBranch(branchName: String) {
     warn("""
         |could not find [$branchName] branch, defaulting to initial version: ${config.initialVersion}, please create the following required branches:
         | main
